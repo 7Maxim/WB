@@ -1,7 +1,7 @@
 const getGoods = () => {
 
   const links = document.querySelectorAll('.navigation-link');
-
+  const more = document.querySelector('.more');
 
   const renderGoods = (goods) => {
 
@@ -35,8 +35,6 @@ const getGoods = () => {
       .then((data) => {
         const array = categoty ? data.filter((item) => item[categoty] === value) : data;
 
-
-
         localStorage.setItem('goods', JSON.stringify(array));
 
         if (window.location.pathname !== "/goods.html") {
@@ -44,24 +42,27 @@ const getGoods = () => {
         } else {
           renderGoods(array);
         }
-
-
       })
   }
 
   links.forEach((link) => {
     link.addEventListener('click', (event) => {
       event.preventDefault();
-
       const linkValue = link.textContent;
       const categoty = link.dataset.field;
-
       getData(linkValue, categoty);
     })
   })
 
   if (localStorage.getItem('goods') && window.location.pathname === "/goods.html") {
     renderGoods(JSON.parse(localStorage.getItem('goods')))
+  }
+
+  if (more) {
+    more.addEventListener('click', (event) => {
+      event.preventDefault();
+      getData();
+    })
   }
 
 }
